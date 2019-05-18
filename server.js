@@ -1,8 +1,18 @@
 const tus = require('tus-node-server');
+const decode = require('tus-metadata').decode;
+
 
 const server = new tus.Server();
 server.datastore = new tus.FileStore({
     path: '/files'
+});
+
+server.on(tus.EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
+	console.log("");
+    console.log(`Received file:`);
+    console.log(event);
+    console.log("Decoded metadata:")
+    console.log(decode(event.file.upload_metadata));
 });
 
 const host = '127.0.0.1';
